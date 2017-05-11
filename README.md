@@ -1,5 +1,5 @@
 # WangTagReading
-Conversion of old fashioned TIFFs with Wang annotation to modern TIFF or PDF with annotations with GdPicture.NET 14.
+Conversion of old fashioned TIFFs with Wang annotations to modern TIFF or PDF with annotations with GdPicture.NET 14.
 
 Wang annotation is an old and badly documented annotation format. In order to help several customers in trouble with thousands of documents using this deprecated format, ORPALIS has developed tools to convert these old-fashioned files to state of the art annotated PDFs or TIFFs.
 
