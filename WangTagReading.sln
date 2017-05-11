@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WangTagReadingLibrary", "WangTagReadingLibrary\WangTagReadingLibrary.csproj", "{E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WangTiffToPdf", "WangTiffToPdf\WangTiffToPdf.csproj", "{3CC6D93D-5FBE-4DFC-A36A-ED18B727BE7F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B} = {E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WangTagReadingLibraryTests", "WangTagReadingLibraryTests\WangTagReadingLibraryTests.csproj", "{97C69106-7DEA-4CA3-8E71-2BE737094AB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WangTiffToTiff", "WangTiffToTiff\WangTiffToTiff.csproj", "{70C33ECF-1F24-4BB6-8CA2-AF4D4C8D6CD3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3BA1132-C84B-45B2-B45A-E4E2AFF1E63B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC6D93D-5FBE-4DFC-A36A-ED18B727BE7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC6D93D-5FBE-4DFC-A36A-ED18B727BE7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC6D93D-5FBE-4DFC-A36A-ED18B727BE7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC6D93D-5FBE-4DFC-A36A-ED18B727BE7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C69106-7DEA-4CA3-8E71-2BE737094AB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C69106-7DEA-4CA3-8E71-2BE737094AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C69106-7DEA-4CA3-8E71-2BE737094AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C69106-7DEA-4CA3-8E71-2BE737094AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C33ECF-1F24-4BB6-8CA2-AF4D4C8D6CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C33ECF-1F24-4BB6-8CA2-AF4D4C8D6CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C33ECF-1F24-4BB6-8CA2-AF4D4C8D6CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C33ECF-1F24-4BB6-8CA2-AF4D4C8D6CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
