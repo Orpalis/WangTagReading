@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WangTiffToTiff</RootNamespace>
     <AssemblyName>WangTiffToTiff</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <PublishUrl>publish\</PublishUrl>
@@ -27,6 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,8 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GdPicture.NET.14">
-      <HintPath>C:\GdPicture.NET 14\Redist\Framework 4.5\GdPicture.NET.14.dll</HintPath>
+    <Reference Include="GdPicture.NET.14, Version=14.0.0.0, Culture=neutral, PublicKeyToken=ad06cf3cfe517a7d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\GdPicture.NET 14\Redist\Framework 4.0\GdPicture.NET.14.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -27,26 +27,26 @@
         /// <summary>
         /// The link.
         /// </summary>
-        public string Link { get; }
+        public string Link { get; private set; }
 
         /// <summary>
         /// The location.
         /// </summary>
-        public string Location { get; }
+        public string Location { get; private set; }
 
         /// <summary>
         /// The working directory.
         /// </summary>
-        public string WorkingDirectory { get; }
+        public string WorkingDirectory { get; private set; }
 
         /// <summary>
         /// Flag for hyperlink refers to this document.
         /// </summary>
-        public bool InternalLink { get; }
+        public bool InternalLink { get; private set; }
 
         /// <summary>
         /// Flag for can remove hyperlink from mark.
         /// </summary>
-        public bool CanRemoveHyperlink { get; }
+        public bool CanRemoveHyperlink { get; private set; }
     }
 }

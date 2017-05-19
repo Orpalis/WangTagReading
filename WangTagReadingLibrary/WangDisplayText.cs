@@ -22,17 +22,17 @@
         /// Angle of text baseline to image in tenths of a degree; valid values are 0, 900, 1800, 2700.
         /// </summary>
         // TODO - David Ometto - 2016-11-24 - Replace the int with an enum to make sure we correctly translate the value.
-        public int Orientation { get; }
+        public int Orientation { get; private set; }
 
         /// <summary>
         /// The creation scale.
         /// Always 72000 divided by the vertical resolution of the  base image when writing.
         /// </summary>
-        public uint CreationScale { get; }
+        public uint CreationScale { get; private set; }
 
         /// <summary>
         /// The text for the annotation.
         /// </summary>
-        public string Text { get; }
+        public string Text { get; private set; }
     }
 }

@@ -30,8 +30,8 @@ namespace WangTiffToPdf
         /// <param name="textWriter">The stream to output the annotations as text (optional).</param>
         public WangTiffToPdfWangAnnotationHandler(int widthPixels, int heightPixels, double widthInches, double heightInches, AnnotationManager annotationManager, StreamWriter textWriter)
         {
-            _widthPixels = (double) widthPixels;
-            _heightPixels = (double) heightPixels;
+            _widthPixels = (double)widthPixels;
+            _heightPixels = (double)heightPixels;
             _widthInches = widthInches;
             _heightInches = heightInches;
             _annotationManager = annotationManager;
@@ -48,13 +48,15 @@ namespace WangTiffToPdf
         /// <param name="dstYPixels">The Y coordinate of the target (pixels).</param>
         /// <param name="colorComponents">The components for the color of the line.</param>
         /// <param name="borderWidthPixels">The width of the border (pixels).</param>
-        public void AddLineAnnot( int srcXPixels, int srcYPixels, int dstXPixels, int dstYPixels, byte[] colorComponents, int borderWidthPixels)
+        public void AddLineAnnot(int srcXPixels, int srcYPixels, int dstXPixels, int dstYPixels, byte[] colorComponents, int borderWidthPixels)
         {
-            _textWriter?.WriteLine("AddLineAnnot");
-            _textWriter?.WriteLine("srcYPixels: " + srcXPixels + "srcYPixels: " + srcYPixels +  " dstXPixels: " + dstXPixels + " dstYPixels: " + dstYPixels);
-            _textWriter?.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
-            _textWriter?.WriteLine("borderWidthPixels: " + borderWidthPixels );
-
+            if (_textWriter != null)
+            {
+                _textWriter.WriteLine("AddLineAnnot");
+                _textWriter.WriteLine("srcYPixels: " + srcXPixels + "srcYPixels: " + srcYPixels + " dstXPixels: " + dstXPixels + " dstYPixels: " + dstYPixels);
+                _textWriter.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
+                _textWriter.WriteLine("borderWidthPixels: " + borderWidthPixels);
+            }
             AnnotationLine annotation = _annotationManager.AddLineAnnot(GdPictureColor(colorComponents), ToInchesHorizontal(srcXPixels), ToInchesVertical(srcYPixels), ToInchesHorizontal(dstXPixels), ToInchesVertical(dstYPixels));
             GdPictureStatus status = _annotationManager.GetStat();
             if (status != GdPictureStatus.OK)
@@ -73,19 +75,19 @@ namespace WangTiffToPdf
         /// <param name="borderWidthPixels">The width of the border (pixels).</param>
         public void AddFreeHandHighligtherAnnot(int[] pointsCoordinates, byte[] colorComponents, int borderWidthPixels)
         {
-            _textWriter?.WriteLine("AddFreeHandHighligtherAnnot");
             if (_textWriter != null)
             {
+                _textWriter.WriteLine("AddFreeHandHighligtherAnnot");
                 for (int index = 0; index < pointsCoordinates.Length; index++)
                 {
                     _textWriter.Write(pointsCoordinates[index] + " ");
                 }
                 _textWriter.WriteLine("");
-            }                        
-            _textWriter?.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
-            _textWriter?.WriteLine("borderWidthPixels: " + borderWidthPixels);
+                _textWriter.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
+                _textWriter.WriteLine("borderWidthPixels: " + borderWidthPixels);
+            }
 
-            AnnotationFreeHandHighlighter annotation = _annotationManager.AddFreeHandHighlighterAnnot( GdPictureColor(colorComponents), ToInches(pointsCoordinates));
+            AnnotationFreeHandHighlighter annotation = _annotationManager.AddFreeHandHighlighterAnnot(GdPictureColor(colorComponents), ToInches(pointsCoordinates));
             GdPictureStatus status = _annotationManager.GetStat();
             if (status != GdPictureStatus.OK)
             {
@@ -111,11 +113,13 @@ namespace WangTiffToPdf
         public void AddTextAnnot(int leftPixels, int topPixels, int widthPixels, int heightPixels, string text, bool italic, bool underline, string fontName,
             int rotation)
         {
-            _textWriter?.WriteLine("AddTextAnnot");
-            _textWriter?.WriteLine("leftPixels: " + leftPixels + " topPixels: " + topPixels + " widthPixels: " + widthPixels + " heightPixels: " + heightPixels);
-            _textWriter?.WriteLine("text: " + text );
-            _textWriter?.WriteLine("italic: " + italic + " underline: " + underline + " fontName: " + fontName + " rotation: " + rotation);
-
+            if (_textWriter != null)
+            {
+                _textWriter.WriteLine("AddTextAnnot");
+                _textWriter.WriteLine("leftPixels: " + leftPixels + " topPixels: " + topPixels + " widthPixels: " + widthPixels + " heightPixels: " + heightPixels);
+                _textWriter.WriteLine("text: " + text);
+                _textWriter.WriteLine("italic: " + italic + " underline: " + underline + " fontName: " + fontName + " rotation: " + rotation);
+            }
             AnnotationText annotationText = _annotationManager.AddTextAnnot(ToInchesHorizontal(leftPixels),
                 ToInchesVertical(topPixels), ToInchesHorizontal(widthPixels), ToInchesVertical(heightPixels), text);
             GdPictureStatus status = _annotationManager.GetStat();
@@ -231,11 +235,11 @@ namespace WangTiffToPdf
         public void AddPolygonAnnot(int[] pointsCoordinates, byte[] borderColorComponents, byte[] backColorComponents,
             bool fill, int borderWidthPixels)
         {
-            PointF[] pointsForGdPicture = new PointF[pointsCoordinates.Length/2];
+            PointF[] pointsForGdPicture = new PointF[pointsCoordinates.Length / 2];
             for (int index = 0; index < pointsForGdPicture.Length; index++)
             {
-                pointsForGdPicture[index].X = ToInchesHorizontal(pointsCoordinates[2*index]);
-                pointsForGdPicture[index].Y = ToInchesVertical(pointsCoordinates[2*index + 1]);
+                pointsForGdPicture[index].X = ToInchesHorizontal(pointsCoordinates[2 * index]);
+                pointsForGdPicture[index].Y = ToInchesVertical(pointsCoordinates[2 * index + 1]);
             }
 
             AnnotationPolygon annotationPolygon =
@@ -264,11 +268,11 @@ namespace WangTiffToPdf
         /// <param name="borderWidthPixels">The width of the border (pixels).</param>
         public void AddFreeHandAnnot(int[] pointsCoordinates, byte[] colorComponents, int borderWidthPixels)
         {
-            PointF[] pointsForGdPicture = new PointF[pointsCoordinates.Length/2];
-            for (int index = 0; index < pointsForGdPicture.Length; index ++)
+            PointF[] pointsForGdPicture = new PointF[pointsCoordinates.Length / 2];
+            for (int index = 0; index < pointsForGdPicture.Length; index++)
             {
-                pointsForGdPicture[index].X = ToInchesHorizontal(pointsCoordinates[2*index]);
-                pointsForGdPicture[index].Y = ToInchesVertical(pointsCoordinates[2*index + 1]);
+                pointsForGdPicture[index].X = ToInchesHorizontal(pointsCoordinates[2 * index]);
+                pointsForGdPicture[index].Y = ToInchesVertical(pointsCoordinates[2 * index + 1]);
             }
 
             AnnotationFreeHand annotationFreeHand = _annotationManager.AddFreeHandAnnot(
@@ -346,7 +350,7 @@ namespace WangTiffToPdf
         /// <returns>>The coordinates in  points.</returns>
         private float ToInchesHorizontal(int pixels)
         {
-            return (float) (((double) pixels/_widthPixels)*_widthInches);
+            return (float)(((double)pixels / _widthPixels) * _widthInches);
         }
 
         /// <summary>
@@ -356,7 +360,7 @@ namespace WangTiffToPdf
         /// <returns>>The coordinates in  points.</returns>
         private float ToInchesVertical(int pixels)
         {
-            return (float) (((double) pixels/_heightPixels)*_heightInches);
+            return (float)(((double)pixels / _heightPixels) * _heightInches);
         }
 
         /// <summary>

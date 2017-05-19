@@ -50,11 +50,13 @@ namespace WangTiffToTiff
         /// <param name="borderWidthPixels">The width of the border (pixels).</param>
         public void AddLineAnnot(int srcXPixels, int srcYPixels, int dstXPixels, int dstYPixels, byte[] colorComponents, int borderWidthPixels)
         {
-            _textWriter?.WriteLine("AddLineAnnot");
-            _textWriter?.WriteLine("srcYPixels: " + srcXPixels + "srcYPixels: " + srcYPixels + " dstXPixels: " + dstXPixels + " dstYPixels: " + dstYPixels);
-            _textWriter?.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
-            _textWriter?.WriteLine("borderWidthPixels: " + borderWidthPixels);
-
+            if (_textWriter != null)
+            {
+                _textWriter.WriteLine("AddLineAnnot");
+                _textWriter.WriteLine("srcYPixels: " + srcXPixels + "srcYPixels: " + srcYPixels + " dstXPixels: " + dstXPixels + " dstYPixels: " + dstYPixels);
+                _textWriter.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
+                _textWriter.WriteLine("borderWidthPixels: " + borderWidthPixels);
+            }
             AnnotationLine annotation = _annotationManager.AddLineAnnot(GdPictureColor(colorComponents), ToInchesHorizontal(srcXPixels), ToInchesVertical(srcYPixels), ToInchesHorizontal(dstXPixels), ToInchesVertical(dstYPixels));
             GdPictureStatus status = _annotationManager.GetStat();
             if (status != GdPictureStatus.OK)
@@ -73,17 +75,17 @@ namespace WangTiffToTiff
         /// <param name="borderWidthPixels">The width of the border (pixels).</param>
         public void AddFreeHandHighligtherAnnot(int[] pointsCoordinates, byte[] colorComponents, int borderWidthPixels)
         {
-            _textWriter?.WriteLine("AddFreeHandHighligtherAnnot");
             if (_textWriter != null)
             {
+                _textWriter.WriteLine("AddFreeHandHighligtherAnnot");
                 for (int index = 0; index < pointsCoordinates.Length; index++)
                 {
                     _textWriter.Write(pointsCoordinates[index] + " ");
                 }
                 _textWriter.WriteLine("");
+                _textWriter.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
+                _textWriter.WriteLine("borderWidthPixels: " + borderWidthPixels);
             }
-            _textWriter?.WriteLine("colorComponents: " + colorComponents[0] + " " + colorComponents[1] + " " + colorComponents[2]);
-            _textWriter?.WriteLine("borderWidthPixels: " + borderWidthPixels);
 
             AnnotationFreeHandHighlighter annotation = _annotationManager.AddFreeHandHighlighterAnnot(GdPictureColor(colorComponents), ToInches(pointsCoordinates));
             GdPictureStatus status = _annotationManager.GetStat();
@@ -111,11 +113,13 @@ namespace WangTiffToTiff
         public void AddTextAnnot(int leftPixels, int topPixels, int widthPixels, int heightPixels, string text, bool italic, bool underline, string fontName,
             int rotation)
         {
-            _textWriter?.WriteLine("AddTextAnnot");
-            _textWriter?.WriteLine("leftPixels: " + leftPixels + " topPixels: " + topPixels + " widthPixels: " + widthPixels + " heightPixels: " + heightPixels);
-            _textWriter?.WriteLine("text: " + text);
-            _textWriter?.WriteLine("italic: " + italic + " underline: " + underline + " fontName: " + fontName + " rotation: " + rotation);
-
+            if (_textWriter != null)
+            {
+                _textWriter.WriteLine("AddTextAnnot");
+                _textWriter.WriteLine("leftPixels: " + leftPixels + " topPixels: " + topPixels + " widthPixels: " + widthPixels + " heightPixels: " + heightPixels);
+                _textWriter.WriteLine("text: " + text);
+                _textWriter.WriteLine("italic: " + italic + " underline: " + underline + " fontName: " + fontName + " rotation: " + rotation);
+            }
             AnnotationText annotationText = _annotationManager.AddTextAnnot(ToInchesHorizontal(leftPixels),
                 ToInchesVertical(topPixels), ToInchesHorizontal(widthPixels), ToInchesVertical(heightPixels), text);
             GdPictureStatus status = _annotationManager.GetStat();

@@ -19,11 +19,11 @@
         /// <summary>
         /// Name of named block.
         /// </summary>
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Size of named block.
         /// </summary>
-        public int Size { get; }
+        public int Size { get; private set; }
     }
 }

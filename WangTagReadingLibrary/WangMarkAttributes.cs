@@ -108,7 +108,7 @@
         /// <summary>
         /// The type of the mark.
         /// </summary>
-        public WangMarkType Type { get; }
+        public WangMarkType Type { get; private set; }
 
         /// <summary>
         /// The bounds for the annotation.
@@ -116,7 +116,7 @@
         /// <remarks>
         /// The order is left, top, right, bottom, see WangAnnotationTranslation.
         /// </remarks>
-        public int[] Bounds { get; }
+        public int[] Bounds { get; private set; }
 
         /// <summary>
         /// The main color; for example, the color of all lines, all rectangles, and standalone text.
@@ -124,7 +124,7 @@
         /// <remarks>
         /// The order is blue, green, red, see WangAnnotationTranslation.
         /// </remarks>
-        public byte[] Color1 { get; }
+        public byte[] Color1 { get; private set; }
 
         /// <summary>
         /// The secondary color; for example, the color of the text of an Attach-a-Note.
@@ -132,7 +132,7 @@
         /// <remarks>
         /// The order is blue, green, red,, see WangAnnotationTranslation.
         /// </remarks>
-        public byte[] Color2 { get; }
+        public byte[] Color2 { get; private set; }
 
         /// <summary>
         /// The flag indicating whether the mark is drawn highlighted or not.
