@@ -25,7 +25,7 @@ namespace WangTiffToTiff
 
             /// <summary>
             /// The width of the image (inches).
-            /// </summary>            
+            /// </summary>
             public double WidthInches;
 
             /// <summary>
@@ -53,7 +53,6 @@ namespace WangTiffToTiff
             using (GdPictureImaging gdPictureImaging = new GdPictureImaging())
             {
                 // Load the image
-
                 int imageId = gdPictureImaging.CreateGdPictureImageFromFile(strInputFilePath);
                 if (imageId == 0)
                 {
@@ -68,28 +67,22 @@ namespace WangTiffToTiff
 
                 PageInfo[] pageInfo = ReadPageInfo(gdPictureImaging, imageId, pageCount);
 
-                using (MemoryStream stream = new MemoryStream())
+                // Save tiff to output file
+                GdPictureStatus status = pageCount > 1
+                    ? gdPictureImaging.TiffSaveMultiPageToFile(imageId, strOutputFilePath,
+                        TiffCompression.TiffCompressionAUTO, 100)
+                    : gdPictureImaging.SaveAsTIFF(imageId, strOutputFilePath, false,
+                        TiffCompression.TiffCompressionAUTO, 100);
+
+                gdPictureImaging.ReleaseGdPictureImage(imageId);
+
+                if (status != GdPictureStatus.OK)
                 {
-                    // Save the tiff in a stream
-
-                    if (gdPictureImaging.SaveAsTIFF(imageId, stream, false, TiffCompression.TiffCompressionAUTO, 100)
-                        != GdPictureStatus.OK)
-                    {
-                        gdPictureImaging.ReleaseGdPictureImage(imageId);
-                        return false;
-                    }
-
-                    gdPictureImaging.ReleaseGdPictureImage(imageId);
-
-                    // Writes the annotations to the tiff
-
-                    if (!WriteAnnotations(strOutputFilePath, ref errorMessage, stream, pageCount, pageInfo,
-                            textExtension))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-                return true;
+
+                // Writes the annotations to the tiff
+                return WriteAnnotations(strOutputFilePath, ref errorMessage, pageInfo, pageCount, textExtension);
             }
         }
 
@@ -134,76 +127,83 @@ namespace WangTiffToTiff
         /// </summary>
         /// <param name="strOutputFilePath">The path to the output file.</param>
         /// <param name="errorMessage">Used to retrieve an error message.</param>
-        /// <param name="stream">The stream containing the TIFF.</param>
         /// <param name="pageCount">The number of pages.</param>
         /// <param name="pageInfo">The page information.</param>
         /// <param name="textExtension">The extension for the text file.</param>
         /// <returns>true if the conversion succeded otherwise returns false.</returns>
-        private static bool WriteAnnotations(string strOutputFilePath, ref string errorMessage, MemoryStream stream,
-            int pageCount,
-            PageInfo[] pageInfo, string textExtension)
+        private static bool WriteAnnotations(string strOutputFilePath, ref string errorMessage, PageInfo[] pageInfo,
+            int pageCount, string textExtension)
         {
-            using (AnnotationManager annotationManager = new AnnotationManager())
+            // Load the tiff from the stream
+            using (MemoryStream stream = new MemoryStream())
             {
-                // Load the tiff from the stream
-
-                GdPictureStatus status = annotationManager.InitFromStream(stream);
-                if (status != GdPictureStatus.OK)
+                using (FileStream fileStream = File.OpenRead(strOutputFilePath))
                 {
-                    errorMessage = annotationManager.GetStat().ToString();
-                    return false;
+                    stream.SetLength(fileStream.Length);
+                    fileStream.Read(stream.GetBuffer(), 0, (int)fileStream.Length);
                 }
 
-                // Write the annotation from the pages
-
-                for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
+                using (AnnotationManager annotationManager = new AnnotationManager())
                 {
-                    if (pageInfo[pageIndex].WangTagData != null)
+                    GdPictureStatus status = annotationManager.InitFromStream(stream);
+                    if (status != GdPictureStatus.OK)
                     {
-                        annotationManager.SelectPage(pageIndex + 1);
-                        bool wangAnnotationsReadingSuccess;
-                        if (textExtension == "")
+                        errorMessage = annotationManager.GetStat().ToString();
+                        return false;
+                    }
+
+                    // Write the annotation from the pages
+                    for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
+                    {
+                        if (pageInfo[pageIndex].WangTagData != null)
                         {
-                            WangTiffToGdPictureTiffWangAnnotationHandler handler =
-                                new WangTiffToGdPictureTiffWangAnnotationHandler(pageInfo[pageIndex].WidthPixels,
-                                    pageInfo[pageIndex].HeightPixels, pageInfo[pageIndex].WidthInches,
-                                    pageInfo[pageIndex].HeightInches, annotationManager, null);
-                            wangAnnotationsReadingSuccess = WangTagReadingLibrary.WangAnnotationsReader.Read(handler,
-                                pageInfo[pageIndex].WangTagData);
-                        }
-                        else
-                        {
-                            using (
-                                StreamWriter textWriter =
-                                    new StreamWriter(strOutputFilePath + "." + pageIndex + textExtension))
+                            annotationManager.SelectPage(pageIndex + 1);
+                            bool wangAnnotationsReadingSuccess;
+                            if (textExtension == "")
                             {
                                 WangTiffToGdPictureTiffWangAnnotationHandler handler =
                                     new WangTiffToGdPictureTiffWangAnnotationHandler(pageInfo[pageIndex].WidthPixels,
                                         pageInfo[pageIndex].HeightPixels, pageInfo[pageIndex].WidthInches,
-                                        pageInfo[pageIndex].HeightInches, annotationManager, textWriter);
+                                        pageInfo[pageIndex].HeightInches, annotationManager, null);
                                 wangAnnotationsReadingSuccess = WangTagReadingLibrary.WangAnnotationsReader.Read(
                                     handler,
                                     pageInfo[pageIndex].WangTagData);
                             }
-                        }
-                        if (!wangAnnotationsReadingSuccess)
-                        {
-                            annotationManager.Close();
-                            errorMessage = "An error occurred while reading Wang annotations.";
-                            return false;
+                            else
+                            {
+                                using (
+                                    StreamWriter textWriter =
+                                        new StreamWriter(strOutputFilePath + "." + pageIndex + textExtension))
+                                {
+                                    WangTiffToGdPictureTiffWangAnnotationHandler handler =
+                                        new WangTiffToGdPictureTiffWangAnnotationHandler(
+                                            pageInfo[pageIndex].WidthPixels,
+                                            pageInfo[pageIndex].HeightPixels, pageInfo[pageIndex].WidthInches,
+                                            pageInfo[pageIndex].HeightInches, annotationManager, textWriter);
+                                    wangAnnotationsReadingSuccess = WangTagReadingLibrary.WangAnnotationsReader.Read(
+                                        handler,
+                                        pageInfo[pageIndex].WangTagData);
+                                }
+                            }
+                            if (!wangAnnotationsReadingSuccess)
+                            {
+                                annotationManager.Close();
+                                errorMessage = "An error occurred while reading Wang annotations.";
+                                return false;
+                            }
                         }
                     }
-                }
 
-                // Writes the tiff as a file
-
-                status = annotationManager.SaveDocumentToTIFF(strOutputFilePath, TiffCompression.TiffCompressionAUTO);
-                if (status != GdPictureStatus.OK)
-                {
-                    errorMessage = annotationManager.GetStat().ToString();
-                    return false;
+                    // Writes the tiff as a file
+                    status = annotationManager.SaveDocumentToTIFF(strOutputFilePath,
+                        TiffCompression.TiffCompressionAUTO);
+                    if (status != GdPictureStatus.OK)
+                    {
+                        errorMessage = annotationManager.GetStat().ToString();
+                        return false;
+                    }
+                    annotationManager.Close();
                 }
-                annotationManager.Close();
             }
             return true;
         }
